@@ -1,0 +1,23 @@
+# .dockerignore
+#To make your Docker builds faster and your final image smaller
+
+# Git files
+.git
+.gitignore
+
+# Node.js dependencies (will be installed inside the container)
+node_modules/
+
+# Strapi build artifacts (will be generated inside the container)
+build/
+
+# Temporary and local files
+.tmp/
+*.db
+
+# Docker files
+Dockerfile
+
+# Editor and OS-specific files
+.vscode/
+.DS_Store
