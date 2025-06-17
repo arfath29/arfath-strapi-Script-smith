@@ -3,12 +3,11 @@ name: CI/CD - Build, Push Docker & Deploy via Terraform
 on:
    push:
      branches:
-       - main
+       - arfath
    workflow_dispatch:
 
 env:
   DOCKER_IMAGE_NAME: arfath29/strapi-app
-  IMAGE_TAG: v1
   AWS_REGION: ap-south-1
 
 jobs:
@@ -29,10 +28,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t $DOCKER_IMAGE_NAME:IMAGE_TAG .
+        run: docker build -t $DOCKER_IMAGE_NAME:v1 .
 
       - name: Push Docker image
-        run: docker push $DOCKER_IMAGE_NAME:IMAGE_TAG   
+        run: docker push $DOCKER_IMAGE_NAME:v1   
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
