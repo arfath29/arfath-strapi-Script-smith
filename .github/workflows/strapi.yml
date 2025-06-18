@@ -1,4 +1,4 @@
-name: CI/CD - Build, Push Docker & Deploy via Terraform
+name: CI/CD - Build, Push Docker & Deploy via Terraform on ECS Fargate
 
 on:
 #   push:
@@ -8,8 +8,7 @@ on:
 
 env:
   DOCKER_IMAGE_NAME: arfath29/strapi-app
-  IMAGE_TAG: v1
-  AWS_REGION: us-east-1
+  AWS_REGION: ap-south-1
 
 jobs:
   deploy:

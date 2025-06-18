@@ -95,3 +95,47 @@ This setup ensures a fully functional Strapi instance is available as soon as th
      - **Pull and run the new Docker image as a container.**
 
 **With this workflow in place, deployment becomes fully automated — from code changes to live infrastructure.**
+
+# Task-7: Deploy Strapi on AWS ECS Fargate via Terraform and GitHub Actions (CI/CD)
+
+This task involves deploying a Strapi application on AWS using ECS Fargate. The entire infrastructure is provisioned and managed through Terraform, and the build, push, and deployment processes are automated via GitHub Actions.
+
+---
+
+## 🚀 Objective
+
+To containerize the Strapi application, push the image to Docker Hub, and automate the provisioning of ECS Fargate infrastructure using Terraform. CI/CD is implemented through GitHub Actions to ensure seamless deployment on code changes.
+
+---
+
+## 📦 Steps Involved
+
+### 1. Containerize the Strapi Application
+
+We use a Dockerfile located in the root of the repository to build a Docker image for the Strapi application.
+
+```bash
+docker build -t <your-dockerhub-username>/strapi:<tag> .
+```
+### 2. Provision ECS Fargate Infrastructure Using Terraform
+Terraform code is located in the terraform/ directory and handles:
+
+ - **VPC and networking**
+
+ - **ECS Cluster and Fargate service**
+
+ - **Task definitions pointing to the Docker image**
+
+ - **Load balancer for public access**
+
+### 3. Automate with GitHub Actions
+**A GitHub Actions workflow file (.github/workflows/deploy.yml) automates the full process:**
+
+ - **Builds the Docker image from the latest commit**
+
+ - **Pushes it to Docker Hub**
+
+ - **Applies the Terraform infrastructure with the new image**
+
+The workflow uses Terraform's -var="docker_image=..." flag to pass the image to ECS.
+
