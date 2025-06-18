@@ -1,9 +1,7 @@
-<<<<<<< HEAD
 FROM node:18
-=======
+
 # Use Node.js LTS version
 FROM node:18-alpine
->>>>>>> 077ba76 (3rd commit from arfath)
 
 WORKDIR /app
 
