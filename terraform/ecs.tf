@@ -21,6 +21,10 @@ resource "aws_ecs_cluster" "strapi_cluster" {
 #   role       = aws_iam_role.ecs_task_execution_role.name
 #   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 # }
+data "aws_iam_role" "ecs_task_execution_role" {
+  name = "ecsTaskExecutionRole"
+}
+
 
 resource "aws_ecs_task_definition" "strapi_task" {
   family                   = "strapi-task"
@@ -28,7 +32,7 @@ resource "aws_ecs_task_definition" "strapi_task" {
   network_mode             = "awsvpc"
   cpu                      = "512"
   memory                   = "1024"
-  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  execution_role_arn       = data.aws_iam_role.ecs_task_execution_role.arn
 
   container_definitions = jsonencode([
     {
