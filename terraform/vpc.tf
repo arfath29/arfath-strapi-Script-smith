@@ -1,5 +1,8 @@
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "strapi-vpc"
+  }
 }
 
 resource "aws_subnet" "subnet" {
@@ -7,12 +10,18 @@ resource "aws_subnet" "subnet" {
   cidr_block              = "10.0.1.0/24"
   availability_zone       = data.aws_availability_zones.available.names[0]
   map_public_ip_on_launch = true
+  tags = {
+    Name = "strapi-subnet"
+  }
 }
 
 data "aws_availability_zones" "available" {}
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "strapi-internet-gateway"
+  }
 }
 
 resource "aws_route_table" "rt" {
@@ -21,6 +30,9 @@ resource "aws_route_table" "rt" {
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.gw.id
+  }
+  tags = {
+    Name = "strapi-route-table"
   }
 }
 
@@ -46,5 +58,8 @@ resource "aws_security_group" "ecs_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "strapi-ecs-sg"
   }
 }

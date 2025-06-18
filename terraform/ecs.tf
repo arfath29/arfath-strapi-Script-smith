@@ -45,18 +45,18 @@ resource "aws_ecs_task_definition" "strapi_task" {
   ])
 }
 
-resource "aws_ecs_service" "strapi_service" {
-  name            = "strapi-service"
-  cluster         = aws_ecs_cluster.strapi_cluster.id
-  launch_type     = "FARGATE"
-  task_definition = aws_ecs_task_definition.strapi_task.arn
-  desired_count   = 1
+# resource "aws_ecs_service" "strapi_service" {
+#   name            = "strapi-service"
+#   cluster         = aws_ecs_cluster.strapi_cluster.id
+#   launch_type     = "FARGATE"
+#   task_definition = aws_ecs_task_definition.strapi_task.arn
+#   desired_count   = 1
 
-  network_configuration {
-    subnets          = [aws_subnet.subnet.id]
-    security_groups  = [aws_security_group.ecs_sg.id]
-    assign_public_ip = true
-  }
+#   network_configuration {
+#     subnets          = [aws_subnet.subnet.id]
+#     security_groups  = [aws_security_group.ecs_sg.id]
+#     assign_public_ip = true
+#   }
 
-  depends_on = [aws_iam_role_policy_attachment.ecs_task_execution_role_policy]
-}
+#   depends_on = [aws_iam_role_policy_attachment.ecs_task_execution_role_policy]
+# }
