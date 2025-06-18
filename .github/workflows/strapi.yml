@@ -46,3 +46,13 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
+      - name: Wait for 10 minutes
+        if: always()
+        run: sleep 600
+  
+      - name: Terraform Destroy
+        if: always()
+        run: |
+          cd terraform
+          terraform destroy -auto-approve
