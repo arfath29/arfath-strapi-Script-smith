@@ -28,6 +28,9 @@ resource "aws_ecs_cluster" "strapi_cluster" {
 data "aws_iam_role" "ecs_task_execution_role" {
   name = "ecsTaskExecutionRole"
 }
+data "aws_iam_role" "ecs_task_role" {
+  name = "ecsTaskExecutionRole"
+}
 
 
 resource "aws_ecs_task_definition" "strapi_task" {
@@ -37,6 +40,8 @@ resource "aws_ecs_task_definition" "strapi_task" {
   cpu                      = "1024"
   memory                   = "3072"
   execution_role_arn       = data.aws_iam_role.ecs_task_execution_role.arn
+  task_role_arn            = data.aws_iam_role.ecs_task_role.arn
+
 
   container_definitions = jsonencode([
     {
