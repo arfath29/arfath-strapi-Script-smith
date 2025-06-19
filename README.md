@@ -139,3 +139,62 @@ Terraform code is located in the terraform/ directory and handles:
 
 The workflow uses Terraform's -var="docker_image=..." flag to pass the image to ECS.
 
+# Task 8: Deploy Strapi on AWS ECS Fargate with GitHub Actions and CloudWatch Monitoring
+
+## Overview
+
+This task automates the deployment of a Strapi application on AWS ECS Fargate using Terraform and GitHub Actions. It avoids using remote backends like S3 or DynamoDB and uses the local state instead. Additionally, CloudWatch is configured for centralized logging and basic metric collection.
+
+---
+
+## GitHub Actions Workflow
+
+The CI/CD pipeline is automated with GitHub Actions, which:
+
+- Builds the Docker image
+- Pushes the image to Docker Hub
+- Initializes and applies the Terraform configuration to:
+  - Launch ECS Fargate resources
+  - Create necessary networking components
+  - Deploy the containerized Strapi app
+
+---
+
+## CloudWatch Integration
+
+Terraform also sets up:
+
+- A CloudWatch Log Group `/ecs/strapi`
+- ECS task logging using the AWS `awslogs` log driver
+- Basic ECS metrics like CPU and Memory usage
+
+> You can optionally enhance this with CloudWatch dashboards or alarms for performance monitoring.
+
+---
+
+2. **Trigger the GitHub Action.**  
+   - This will build the Docker image, push it to Docker Hub, and apply Terraform to deploy ECS infra.
+
+---
+
+## How to Destroy the Infrastructure
+
+Use a separate GitHub Actions workflow that runs `terraform destroy -auto-approve`.  
+It reads the local `terraform.tfstate` file (so don't delete it until teardown is complete).
+
+---
+
+## Requirements
+
+- Terraform CLI
+- AWS Account with ECS/Fargate permissions
+- GitHub repository with secrets configured
+- Dockerfile at root of project
+- Terraform code inside `terraform/` folder
+
+---
+
+## Notes
+
+- This setup uses **local state** (`terraform.tfstate`) and does **not require** S3 or DynamoDB.
+- It is intended for one-time or demo use. For production, use S3 and DynamoDB for state locking and consistency.

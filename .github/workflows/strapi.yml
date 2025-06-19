@@ -1,14 +1,14 @@
 name: CI/CD - Build, Push Docker & Deploy via Terraform on ECS Fargate
 
 on:
-   push:
-     branches:
-       - arfath
+  #  push:
+  #    branches:
+  #      - arfath
    workflow_dispatch:
 
 env:
   DOCKER_IMAGE_NAME: arfath29/strapi-app
-  AWS_REGION: ap-south-1
+  AWS_REGION: us-east-1
 
 jobs:
   deploy:
@@ -46,12 +46,4 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: Wait for 10 minutes
-        if: always()
-        run: sleep 600
-  
-      - name: Terraform Destroy
-        if: always()
-        run: |
-          cd terraform
-          terraform destroy -auto-approve
+          DOCKER_IMAGE_NAME: $DOCKER_IMAGE_NAME:v2

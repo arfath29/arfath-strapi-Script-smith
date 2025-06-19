@@ -1,5 +1,9 @@
 resource "aws_ecs_cluster" "strapi_cluster" {
   name = "strapi-cluster"
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
 }
 
 # resource "aws_iam_role" "ecs_task_execution_role" {
@@ -30,14 +34,14 @@ resource "aws_ecs_task_definition" "strapi_task" {
   family                   = "strapi-task"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  cpu                      = "512"
-  memory                   = "1024"
+  cpu                      = "1024"
+  memory                   = "3072"
   execution_role_arn       = data.aws_iam_role.ecs_task_execution_role.arn
 
   container_definitions = jsonencode([
     {
       name  = "strapi"
-      image = var.docker_image
+      image = var.docker_image # Ensure this points to a valid image:tag
       portMappings = [
         {
           containerPort = 1337
@@ -45,8 +49,17 @@ resource "aws_ecs_task_definition" "strapi_task" {
         }
       ]
       essential = true
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.strapi_logs.name
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "ecs/strapi"
+        }
+      }
     }
   ])
+
 }
 
 resource "aws_ecs_service" "strapi_service" {
@@ -61,6 +74,14 @@ resource "aws_ecs_service" "strapi_service" {
     security_groups  = [aws_security_group.ecs_sg.id]
     assign_public_ip = true
   }
+  enable_execute_command = true
+
+  # Add this CloudWatch tags block if using service-level metrics
+  tags = {
+    environment = "prod"
+    project     = "strapi"
+  }
+
 }
 
 #   depends_on = [aws_iam_role_policy_attachment.ecs_task_execution_role_policy]
