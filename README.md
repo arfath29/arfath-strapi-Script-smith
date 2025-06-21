@@ -198,3 +198,26 @@ It reads the local `terraform.tfstate` file (so don't delete it until teardown i
 
 - This setup uses **local state** (`terraform.tfstate`) and does **not require** S3 or DynamoDB.
 - It is intended for one-time or demo use. For production, use S3 and DynamoDB for state locking and consistency.
+
+# Task 9: Deploy Strapi on AWS ECS Fargate Spot with CloudWatch Monitoring
+
+This task focuses on deploying a Strapi application using **AWS ECS Fargate Spot instances**, provisioned through **Terraform**, and automated using **GitHub Actions**. The deployment includes centralized **CloudWatch logging** and ECS-level metrics monitoring.
+
+---
+
+## 📌 Task Overview
+
+Strapi, a headless CMS, is containerized and deployed as an ECS Fargate service using cost-effective Fargate Spot capacity. Terraform manages the infrastructure while GitHub Actions automates the pipeline from Docker image build to deployment.
+
+---
+
+## ✅ What This Task Covers
+
+1. **Create ECS Cluster and Fargate Task Definition** for Strapi.
+2. **Use FARGATE_SPOT** as the launch strategy to reduce cost.
+3. **Reference pre-existing IAM role** (`ecsTaskExecutionRole`) for permissions.
+4. **Configure CloudWatch Logs** with `/ecs/strapi` log group and `awslogs` driver.
+5. **Deploy ECS Service** with public IP assignment for browser access.
+6. **CI/CD** is managed through GitHub Actions to:
+   - Build and push Docker image to Docker Hub
+   - Apply Terraform configuration automatically

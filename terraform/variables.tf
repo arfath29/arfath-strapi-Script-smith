@@ -5,5 +5,5 @@ variable "aws_region" {
 variable "docker_image" {
   description = "Docker image for the Strapi application"
   type        = string
-  default     = "arfath29/strapi-app:v2"
+  default     = "arfath29/strapi-app:v3"
 }
