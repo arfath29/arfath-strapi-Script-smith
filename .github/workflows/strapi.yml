@@ -46,4 +46,10 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          DOCKER_IMAGE_NAME: $DOCKER_IMAGE_NAME:v2
+          DOCKER_IMAGE_NAME: $DOCKER_IMAGE_NAME:v3
+      
+      - name: Upload state file
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-state
+          path: terraform/terraform.tfstate
