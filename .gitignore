@@ -129,8 +129,7 @@ dist
 build
 .strapi-updater.json
 .strapi-cloud.json
-
-terraform/terraform.tfstate
+ss
 terraform/terraform.tfstate.backup
 terraform/.terraform
 terraform/.terraform.lock.hcl
