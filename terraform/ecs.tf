@@ -54,14 +54,14 @@ resource "aws_ecs_task_definition" "strapi_task" {
         }
       ]
       essential = true
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = aws_cloudwatch_log_group.strapi_logs.name
-          awslogs-region        = var.aws_region
-          awslogs-stream-prefix = "ecs/strapi"
-        }
-      }
+      # logConfiguration = {
+      #   logDriver = "awslogs"
+      #   options = {
+      #     awslogs-group         = aws_cloudwatch_log_group.strapi_logs.name
+      #     awslogs-region        = var.aws_region
+      #     awslogs-stream-prefix = "ecs/strapi"
+      #   }
+      # }
     }
   ])
 
@@ -70,7 +70,6 @@ resource "aws_ecs_task_definition" "strapi_task" {
 resource "aws_ecs_service" "strapi_service" {
   name            = "strapi-service"
   cluster         = aws_ecs_cluster.strapi_cluster.id
-  launch_type     = "FARGATE"
   task_definition = aws_ecs_task_definition.strapi_task.arn
   desired_count   = 1
   capacity_provider_strategy {

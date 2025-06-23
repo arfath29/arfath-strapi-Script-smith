@@ -221,3 +221,64 @@ Strapi, a headless CMS, is containerized and deployed as an ECS Fargate service 
 6. **CI/CD** is managed through GitHub Actions to:
    - Build and push Docker image to Docker Hub
    - Apply Terraform configuration automatically
+
+# 📦 Task-10: Host and Publish Strapi Project on AWS ECS Fargate
+
+This task involves hosting a Strapi application deployed on AWS ECS Fargate and publishing content through the Strapi Admin Panel. After deploying, you can access public APIs via the ALB (Application Load Balancer) DNS URL.
+
+---
+
+## 🔗 Admin Panel Access
+
+Visit the Strapi Admin Panel at:
+
+
+> Replace `<alb-dns-name>` with the DNS of your Application Load Balancer from AWS.
+
+---
+
+## 🚀 Steps to Host and Publish Content
+
+### 1. Log in to Strapi Admin
+- Open the admin panel URL.
+- Sign up as a new admin or log in with existing credentials.
+
+---
+
+### 2. Create Content Types
+- Navigate to **Content-Type Builder**.
+- Choose **Collection Type** or **Single Type**.
+- Define your content structure (e.g., blog with title, content, etc.).
+- Save and allow Strapi to restart.
+
+---
+
+### 3. Configure Public Access
+- Go to **Settings > Roles & Permissions Plugin > Roles**.
+- Select the **Public** role.
+- Enable the following permissions for your content type:
+  - `find`
+  - `findOne`
+- Click **Save**.
+
+> ⚠️ Public role grants open access to the APIs. Configure with caution.
+
+---
+
+### 4. Manage Content
+- Go to **Content Manager**.
+- Choose your content type (e.g., blogs).
+- Click **Add New Entry**.
+- Fill in content and click **Publish**.
+
+---
+
+### 5. Access Public API
+Use the following format to access your public API endpoint:
+
+## ✅ Status
+
+- [x] Strapi Hosted on AWS ECS Fargate
+- [x] Admin Access Configured
+- [x] Content Types Created
+- [x] Public APIs Enabled
