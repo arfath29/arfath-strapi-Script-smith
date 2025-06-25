@@ -282,3 +282,97 @@ Use the following format to access your public API endpoint:
 - [x] Admin Access Configured
 - [x] Content Types Created
 - [x] Public APIs Enabled
+
+# Task-11: Blue/Green Deployment for Strapi on AWS Fargate using CodeDeploy
+
+This task sets up a Blue/Green deployment architecture for the Strapi app using:
+- AWS ECS (Fargate launch type)
+- Application Load Balancer (ALB)
+- AWS CodeDeploy
+
+---
+
+## 🚀 Objective
+
+Implement a deployment strategy that allows traffic to shift between two environments (Blue and Green) for safe deployments and easy rollbacks.
+
+---
+
+## 🧱 Infrastructure Components
+
+- **ECS Cluster**: `strapi-cluster`
+- **ECS Task Definition**: Placeholder for dynamic updates
+- **ECS Service**: `strapi-service` with deployment controller `CODE_DEPLOY`
+- **Application Load Balancer**:
+  - Listener on port 80
+  - Two target groups: `blue` and `green`
+- **Security Groups**:
+  - ALB SG: Allows inbound HTTP (80) and HTTPS (443)
+  - ECS SG: Allows inbound 1337 from ALB
+- **CodeDeploy Application**: `strapi-codedeploy`
+- **CodeDeploy Deployment Group**: `strapi-deploy-group`
+
+---
+
+## 🛠 Steps Performed
+
+### 1. ECS Setup
+- Created `strapi-cluster`
+- Defined `strapi-task` with container port `1337`
+- Service uses FARGATE and CodeDeploy as deployment controller
+- Attached to ALB with `blue` target group
+
+### 2. Load Balancer
+- Created ALB (internet-facing)
+- Created two target groups: `blue` and `green` for ECS traffic
+- Configured Listener on port 80 with forward rule to `blue`
+
+### 3. CodeDeploy Setup
+- Created CodeDeploy app: `strapi-codedeploy`
+- Created deployment group:
+  - Deployment config: `CodeDeployDefault.ECSCanary10Percent5Minutes`
+  - Auto-termination of old tasks enabled
+  - Load balancer info configured to switch between Blue and Green
+
+---
+
+## 🔁 Deployment Workflow
+
+1. **Initial deployment** deploys app to `blue` target group.
+2. On update, **CodeDeploy** launches new tasks and attaches them to `green`.
+3. After health checks pass, CodeDeploy shifts production traffic to `green`.
+4. Old (blue) tasks are terminated after 5 minutes.
+
+---
+
+## ✅ Verification
+
+- Access the app at: `http://<alb-dns-name>/`
+- Monitor deployment status in:
+  - **ECS > Services**
+  - **CodeDeploy > Deployments**
+- To identify active environment (blue/green):
+  - Check ALB listener rules
+  - Or add an environment variable like `VERSION=blue/green` in the app
+
+---
+
+## 🔒 Notes
+
+- Ensure `CodeDeployServiceRole` exists with correct permissions
+- IAM roles must allow ECS and CodeDeploy actions
+- Strapi must be exposed on port `1337` and use compatible container image
+- This setup assumes manual control of state files due to S3 restrictions
+
+---
+
+## 📂 Terraform File References
+
+- `ecs.tf`: ECS Cluster, Task, Service
+- `alb.tf` or `LB.tf`: ALB, Listeners, Target Groups
+- `codedeploy.tf`: CodeDeploy App and Deployment Group
+- `security.tf`: Security groups
+- `vpc.tf`: Networking
+
+---
+

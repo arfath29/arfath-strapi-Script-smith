@@ -7,3 +7,4 @@ variable "docker_image" {
   type        = string
   default     = "arfath29/strapi-app:v3"
 }
+

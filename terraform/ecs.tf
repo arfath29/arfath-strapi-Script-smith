@@ -71,17 +71,36 @@ resource "aws_ecs_service" "strapi_service" {
   name            = "strapi-service"
   cluster         = aws_ecs_cluster.strapi_cluster.id
   task_definition = aws_ecs_task_definition.strapi_task.arn
-  desired_count   = 1
-  capacity_provider_strategy {
-    capacity_provider = "FARGATE_SPOT"
-    weight            = 1
+  launch_type     = "FARGATE"
+  deployment_controller {
+    type = "CODE_DEPLOY"
   }
+  # capacity_provider_strategy {
+  #   capacity_provider = "FARGATE_SPOT"
+  #   weight            = 1
+  # }
+  desired_count           = 1
+  platform_version        = "LATEST"
+  enable_ecs_managed_tags = true
+  propagate_tags          = "SERVICE"
 
   network_configuration {
-    subnets          = [aws_subnet.subnet.id]
+    subnets          = [aws_subnet.public_1.id, aws_subnet.public_2.id]
     security_groups  = [aws_security_group.ecs_sg.id]
     assign_public_ip = true
   }
+  load_balancer {
+    target_group_arn = aws_lb_target_group.blue_tg.arn
+    container_name   = "strapi"
+    container_port   = 1337
+  }
+  deployment_minimum_healthy_percent = 100
+  deployment_maximum_percent         = 200
+
+  # depends_on = [
+  #   aws_lb_listener.http,
+  #   aws_codedeploy_deployment_group.strapi_group
+  # ]
   enable_execute_command = true
 
   # Add this CloudWatch tags block if using service-level metrics
