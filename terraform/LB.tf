@@ -1,17 +1,17 @@
 resource "aws_lb" "strapi_alb" {
-  name               = "strapi-alb"
+  name               = "arfath-strapi-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
   subnets            = [aws_subnet.public_1.id, aws_subnet.public_2.id]
   tags = {
-    Name = "strapi-alb"
+    Name = "arfath-strapi-alb"
   }
 }
 
 
 resource "aws_lb_target_group" "blue_tg" {
-  name        = "strapi-blue-tg"
+  name        = "arfath-strapi-blue-tg"
   port        = 1337
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
@@ -28,7 +28,7 @@ resource "aws_lb_target_group" "blue_tg" {
 }
 
 resource "aws_lb_target_group" "green_tg" {
-  name        = "strapi-green-tg"
+  name        = "arfath-strapi-green-tg"
   port        = 1337
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
@@ -52,5 +52,8 @@ resource "aws_lb_listener" "http" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.blue_tg.arn
+  }
+  lifecycle {
+    ignore_changes = [default_action]
   }
 }

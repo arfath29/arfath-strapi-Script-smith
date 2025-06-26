@@ -1,6 +1,3 @@
-FROM node:18
-
-# Use Node.js LTS version
 FROM node:18-alpine
 
 WORKDIR /app

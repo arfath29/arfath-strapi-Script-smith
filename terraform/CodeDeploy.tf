@@ -1,5 +1,5 @@
 resource "aws_codedeploy_app" "strapi" {
-  name             = "strapi-codedeploy"
+  name             = "arfath-strapi-codedeploy"
   compute_platform = "ECS"
 }
 data "aws_iam_role" "codedeploy_role" {
@@ -10,6 +10,12 @@ resource "aws_codedeploy_deployment_group" "strapi_group" {
   deployment_group_name  = "strapi-deploy-group"
   service_role_arn       = data.aws_iam_role.codedeploy_role.arn
   deployment_config_name = "CodeDeployDefault.ECSCanary10Percent5Minutes"
+
+  deployment_style {
+    deployment_type   = "BLUE_GREEN"
+    deployment_option = "WITH_TRAFFIC_CONTROL"
+  }
+
 
   blue_green_deployment_config {
     deployment_ready_option {

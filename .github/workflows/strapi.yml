@@ -46,7 +46,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          DOCKER_IMAGE_NAME: $DOCKER_IMAGE_NAME:v3
+          DOCKER_IMAGE_NAME: $DOCKER_IMAGE_NAME:v4
       
       # - name: Upload state file
       #   uses: actions/upload-artifact@v4
@@ -54,10 +54,10 @@ jobs:
       #     name: terraform-state
       #     path: terraform/terraform.tfstate
 
-      - name: Commit and Push Terraform State
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add terraform/terraform.tfstate
-          git commit -m "Save terraform state"
-          git push
+      # - name: Commit and Push Terraform State
+      #   run: |
+      #     git config --global user.name "github-actions"
+      #     git config --global user.email "github-actions@github.com"
+      #     git add terraform/terraform.tfstate
+      #     git commit -m "Save terraform state"
+      #     git push

@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "strapi_cluster" {
-  name = "strapi-cluster"
+  name = "arfath-strapi-cluster"
   setting {
     name  = "containerInsights"
     value = "enabled"
@@ -68,7 +68,7 @@ resource "aws_ecs_task_definition" "strapi_task" {
 }
 
 resource "aws_ecs_service" "strapi_service" {
-  name            = "strapi-service"
+  name            = "arfath-strapi-service"
   cluster         = aws_ecs_cluster.strapi_cluster.id
   task_definition = aws_ecs_task_definition.strapi_task.arn
   launch_type     = "FARGATE"
@@ -80,7 +80,6 @@ resource "aws_ecs_service" "strapi_service" {
   #   weight            = 1
   # }
   desired_count           = 1
-  platform_version        = "LATEST"
   enable_ecs_managed_tags = true
   propagate_tags          = "SERVICE"
 
@@ -93,6 +92,14 @@ resource "aws_ecs_service" "strapi_service" {
     target_group_arn = aws_lb_target_group.blue_tg.arn
     container_name   = "strapi"
     container_port   = 1337
+  }
+  lifecycle {
+    ignore_changes = [
+      task_definition,
+      desired_count,
+      load_balancer,
+      network_configuration
+    ]
   }
   deployment_minimum_healthy_percent = 100
   deployment_maximum_percent         = 200

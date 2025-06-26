@@ -4,7 +4,7 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "strapi-vpc"
+    Name = "arfath-strapi-vpc"
   }
 }
 
@@ -12,7 +12,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "strapi-igw"
+    Name = "arfath-strapi-igw"
   }
 }
 
@@ -23,7 +23,7 @@ resource "aws_subnet" "public_1" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "strapi-public-subnet-1"
+    Name = "arfath-strapi-public-subnet-1"
   }
 }
 
@@ -34,7 +34,7 @@ resource "aws_subnet" "public_2" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "strapi-public-subnet-2"
+    Name = "arfath-strapi-public-subnet-2"
   }
 }
 
@@ -47,7 +47,7 @@ resource "aws_route_table" "public_rt" {
   }
 
   tags = {
-    Name = "strapi-public-rt"
+    Name = "arfath-strapi-public-rt"
   }
 }
 
